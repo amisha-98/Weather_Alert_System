@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Weather Alert System</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Alert System</h1>
+        <form th:action="@{/weather}" method="get">
+            <label for="city">Enter City:</label>
+            <input type="text" id="city" name="city" th:value="${param.city}" required>
+            <button type="submit">Get Weather</button>
+        </form>
+        <div class="result" th:if="${temperature != null}">
+            <p th:text="'Current temperature: ' + ${temperature} + '°C'"></p>
+            <p th:classappend="${alertMessage.contains('alert') ? 'alert' : ''}"
+               th:text="'Alert: ' + ${alertMessage}"></p>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+function getLocationAndSubmit() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("lat").value = position.coords.latitude;
+            document.getElementById("lon").value = position.coords.longitude;
+            document.getElementById("weatherForm").submit();
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+</script>
+<form id="weatherForm" th:action="@{/weather}" method="get">
+    <input type="hidden" id="lat" name="lat"/>
+    <input type="hidden" id="lon" name="lon"/>
+    <button type="button" onclick="getLocationAndSubmit()">Get Weather for My Location</button>
+</form>
+<script>
+function sendLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            fetch('/api/weather/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                })
+            });
+        });
+    }
+}
+setInterval(sendLocation, 60000); // Every 1 min = 60000 ms
+sendLocation(); // Send as soon as page loads
+</script>
