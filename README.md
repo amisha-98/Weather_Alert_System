@@ -1,4 +1,5 @@
 #Weather Alert Application
+
 🌩️ This Weather Alert App is a Spring Boot-based web application that fetches and monitors live weather data using the OpenWeatherMap API and sends real-time SMS and email alerts when severe weather conditions are detected at the user’s current location.
 
 🔥 Features
