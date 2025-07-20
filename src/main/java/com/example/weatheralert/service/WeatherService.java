@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 @Service
 public class WeatherService {
-    private final String API_KEY = "8194821e398624dcce8eb8cdd5efcac5";
+    private final String API_KEY = "81---------------------c5";
 
     public boolean isSevereWeather(WeatherData data) {
         if (data.getTemperature() > 40) return true;
